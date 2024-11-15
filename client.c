@@ -4,15 +4,15 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define PORT 8080  // порт, будет подключаться клиент
+#define PORT 1024  // порт, будет подключаться клиент
 
 int main(int argc, char const *argv[]) {
     int sock = 0;
     struct sockaddr_in serv_addr;
-    char buffer[1024] = {0};  // буфер для передач данных
+    char buffer[1024] = {0};  // буфер для передачи данных
     int guess;
 
-    // проверка аргументов команд строки
+    // проверка аргументов командной строки
     if (argc != 2) {
         printf("Использование: %s <Server IP>\n", argv[0]);
         return -1;
@@ -49,9 +49,16 @@ int main(int argc, char const *argv[]) {
         sprintf(buffer, "%d", guess);
         send(sock, buffer, strlen(buffer), 0);
 
-        // получение ответа от сервера
+        // получение ответа от сервера с использованием функции recv
         memset(buffer, 0, sizeof(buffer));
-        int valread = read(sock, buffer, sizeof(buffer));
+        int valread = recv(sock, buffer, sizeof(buffer), 0);
+
+        // проверка на ошибку получения данных
+        if (valread <= 0) {
+            printf("Ошибка при получении данных или соединение закрыто сервером\n");
+            break;
+        }
+
         printf("Сервер: %s\n", buffer);
 
         // проверка, угадано ли число
