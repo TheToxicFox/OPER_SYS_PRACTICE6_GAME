@@ -4,12 +4,12 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define PORT 1024  // порт, будет подключаться клиент
-
+ // порт, будет подключаться клиент
+#define PORT 1024 
 int main(int argc, char const *argv[]) {
     int sock = 0;
     struct sockaddr_in serv_addr;
-    char buffer[1024] = {0};  // буфер для передачи данных
+    char buffer[1024] = {0}; 
     int guess;
 
     // проверка аргументов командной строки
@@ -25,8 +25,8 @@ int main(int argc, char const *argv[]) {
     }
 
     // заполнение структуры с адресом сервера
-    serv_addr.sin_family = AF_INET;          // используем IPv4
-    serv_addr.sin_port = htons(PORT);        // преобразуем порт в порядок байтов
+    serv_addr.sin_family = AF_INET;         
+    serv_addr.sin_port = htons(PORT);       
 
     // преобразование IP-адреса из текстового в бинарное
     if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
