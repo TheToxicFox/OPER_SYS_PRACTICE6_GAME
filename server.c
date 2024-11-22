@@ -87,11 +87,13 @@ int main() {
                 log_message(client_ip, "Клиент угадал правильно");
                 break;
             } else if (guess < number_to_guess) {
-                send(new_socket, "Загаданное число больше", strlen("Загаданное число больше"), 0);
-                log_message(client_ip, response);
+                const char* response = "Загаданное число больше";
+                send(new_socket, response, strlen(response), 0);  // загаданное число больше
+                log_message(client_ip, response); // Логируем сообщение
             } else {
-                send(new_socket, "Загаданное число меньше", strlen("Загаданное число меньше"), 0);
-                log_message(client_ip, response);
+                const char* response = "Загаданное число меньше";
+                send(new_socket, response, strlen(response), 0);  // загаданное число меньше
+                log_message(client_ip, response); // Логируем сообщение
             }
         }
          // закрытие соединения с клиентом
