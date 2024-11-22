@@ -87,9 +87,11 @@ int main() {
                 log_message(client_ip, "Клиент угадал правильно");
                 break;
             } else if (guess < number_to_guess) {
-                send(new_socket, "Загаданное число больше", strlen("Загаданное число больше"), 0);  
+                send(new_socket, "Загаданное число больше", strlen("Загаданное число больше"), 0);
+                log_message(client_ip, response);
             } else {
-                send(new_socket, "Загаданное число меньше", strlen("Загаданное число меньше"), 0);  
+                send(new_socket, "Загаданное число меньше", strlen("Загаданное число меньше"), 0);
+                log_message(client_ip, response);
             }
         }
          // закрытие соединения с клиентом
