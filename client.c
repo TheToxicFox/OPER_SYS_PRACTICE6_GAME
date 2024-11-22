@@ -6,6 +6,7 @@
 
  // порт, будет подключаться клиент
 #define PORT 1024 
+
 int main(int argc, char const *argv[]) {
     int sock = 0;
     struct sockaddr_in serv_addr;
