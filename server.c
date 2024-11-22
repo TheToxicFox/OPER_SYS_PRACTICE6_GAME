@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <time.h>
 
-#define PORT 1024      // порт, на котором будет работать сервер
-#define MAX_CONN 5      // макс количество подключений в очереди
+#define PORT 1024      
+#define MAX_CONN 5     
 
 // Функция для логов сообщений от клиента
 void log_message(const char* client_ip, const char* message) {
@@ -18,20 +18,23 @@ int main() {
     struct sockaddr_in address;
     int addrlen = sizeof(address);
     int number_to_guess, guess;
-    char buffer[1024] = {0};   // буфер для приема данных
-    char client_ip[INET_ADDRSTRLEN];  // строка для хранения IP-адреса клиента
+    char buffer[1024] = {0};   
+    char client_ip[INET_ADDRSTRLEN];  
 
     // создание сокета
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == 0) {
-        perror("socket failed");   // ошибка создания сокета
+        perror("socket failed");   
         exit(EXIT_FAILURE);
     }
 
     // привязка сокета к порту
-    address.sin_family = AF_INET;                  // используем IPv4
-    address.sin_addr.s_addr = INADDR_ANY;          // принимаем подключения с ЛЮБОГО IP
-    address.sin_port = htons(PORT);                // привязка к заданному порту
+    // используем IPv4
+    address.sin_family = AF_INET; 
+    // принимаем подключения с ЛЮБОГО IP
+    address.sin_addr.s_addr = INADDR_ANY;
+    // привязка к заданному порту
+    address.sin_port = htons(PORT);                
 
     // привязка сокета к указанному адресу и порту
     if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
@@ -41,7 +44,7 @@ int main() {
 
     // прослушивание подключений
     if (listen(server_fd, MAX_CONN) < 0) {
-        perror("listen");   // ошибка при режиме прослушивания
+        perror("listen");   
         exit(EXIT_FAILURE);
     }
     
@@ -53,7 +56,7 @@ int main() {
         // ожидание подключения клиента
         new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
         if (new_socket < 0) {
-            perror("accept");   // ошибка при принятии подключения
+            perror("accept");
             exit(EXIT_FAILURE);
         }
 
@@ -66,10 +69,11 @@ int main() {
         number_to_guess = rand() % 255 + 1;
 
         while (1) {
-            memset(buffer, 0, sizeof(buffer));  // очистка буфера приемом
+            // очистка буфера приемом
+            memset(buffer, 0, sizeof(buffer));  
             int valread = recv(new_socket, buffer, sizeof(buffer), 0);
             if (valread <= 0) {
-                log_message(client_ip, "Клиент отключен"); // логи отключения клиента
+                log_message(client_ip, "Клиент отключен");
                 close(new_socket);
                 break;
             }
@@ -79,19 +83,19 @@ int main() {
 
             // проверка введенного числа
             if (guess == number_to_guess) {
-                send(new_socket, "Правильно!", strlen("Правильно!"), 0);  // клиент угадал число
+                send(new_socket, "Правильно!", strlen("Правильно!"), 0); 
                 log_message(client_ip, "Клиент угадал правильно");
                 break;
             } else if (guess < number_to_guess) {
-                send(new_socket, "Загаданное число больше", strlen("Загаданное число больше"), 0);  // загаданное число больше
+                send(new_socket, "Загаданное число больше", strlen("Загаданное число больше"), 0);  
             } else {
-                send(new_socket, "Загаданное число меньше", strlen("Загаданное число меньше"), 0);  // загаданное число меньше
+                send(new_socket, "Загаданное число меньше", strlen("Загаданное число меньше"), 0);  
             }
         }
-
-        close(new_socket);  // закрытие соединения с клиентом
+         // закрытие соединения с клиентом
+        close(new_socket); 
     }
-
-    close(server_fd);  // закрытие сокета сервера
+     // закрытие сокета сервера
+    close(server_fd); 
     return 0;
 }
